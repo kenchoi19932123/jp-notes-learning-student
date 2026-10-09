@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f6f7f2" />
+    <meta name="description" content="整理日文課堂筆記，循序學習重點並用小測驗練習。" />
+    <title>日文自學室｜JP Notes</title>
+    <link rel="stylesheet" href="styles.css?v=2.0" />
+  </head>
+  <body>
+    <section id="loginView" class="login-view"><form id="loginForm" class="login-card"><span class="brand-mark" aria-hidden="true">日</span><p class="eyebrow">JP NOTES · 學習與練習</p><h1>日文自學室</h1><p>請輸入老師提供的學習密碼，開啟本月筆記與練習。</p><label for="accessPassword">學習密碼</label><input id="accessPassword" name="password" type="password" autocomplete="current-password" required /><button id="unlockButton" class="button button-primary" type="submit">登入並開始學習 →</button><p id="loginMessage" class="login-message" role="status" aria-live="polite"></p></form></section><main id="appRoot" class="container" hidden>
+      <header class="site-header">
+        <a class="brand" href="#top" aria-label="日文自學室首頁">
+          <span class="brand-mark" aria-hidden="true">日</span>
+          <span><strong>日文自學室</strong><small>JP NOTES · 學習與練習</small></span>
+        </a>
+        <a class="header-link" href="#learningPoints">我的學習內容 <span aria-hidden="true">↘</span></a>
+      </header>
+
+      <section class="hero" id="top">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="eyebrow-dot"></span> 每次一小步，日文慢慢進步</p>
+          <h1>把課堂筆記，<br /><span>變成真正學會的日文。</span></h1>
+          <p class="hero-description">先看懂一個重點，再用短題目練習。選擇你想複習的月份，現在就開始。</p>
+          <a class="hero-link" href="#studySetup">開始今天的學習 <span aria-hidden="true">↓</span></a>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <div class="sun"></div><div class="paper paper-back"></div>
+          <div class="paper paper-front"><span>今日のことば</span><strong>一歩ずつ</strong><small>いっぽずつ · 一步一步</small></div>
+          <span class="art-spark spark-one">✳</span><span class="art-spark spark-two">✦</span>
+          <span class="art-caption">LESSON 01 <i>—</i> KEEP GOING</span>
+        </div>
+      </section>
+
+      <section class="study-layout" id="studySetup" aria-labelledby="setupTitle">
+        <div class="setup-card">
+          <div class="section-kicker"><span>01</span> 你的學習時間</div>
+          <h2 id="setupTitle">今天想練習甚麼？</h2>
+          <p class="section-intro">選好內容和方式，我們就從第一題開始。</p>
+          <div class="controls">
+            <label for="monthSelect">複習月份<select id="monthSelect"><option value="all">所有月份</option></select></label>
+            <label for="modeSelect">學習方式<select id="modeSelect"><option value="practice">練習模式｜即時看解說</option><option value="exam">測驗模式｜完成後看答案</option></select></label>
+            <label for="countSelect">題目數量<select id="countSelect"><option value="10">10 題｜約 5 分鐘</option><option value="20">20 題｜約 10 分鐘</option><option value="30">30 題｜約 15 分鐘</option><option value="50">50 題｜完整複習</option><option value="Unlimited Practice">不限題數｜全部練習</option></select></label>
+          </div>
+          <button id="startButton" class="button button-primary" type="button">開始練習 <span aria-hidden="true">→</span></button>
+          <p class="setup-footnote"><span aria-hidden="true">✦</span> 不用一次讀完，完成幾題也算進步。</p>
+        </div>
+        <aside class="progress-card" aria-labelledby="progressTitle">
+          <div class="progress-icon" aria-hidden="true">✎</div>
+          <p class="section-kicker">學習小記錄</p>
+          <h2 id="progressTitle">一步一步來</h2>
+          <p>每完成一次練習，就更熟悉一點。</p>
+          <div class="stat-row"><span>已完成練習</span><strong id="sessionsCount">0 <small>次</small></strong></div>
+          <div class="stat-row"><span>累積答對</span><strong id="correctCount">0 <small>題</small></strong></div>
+          <p class="local-note">記錄只保存在這部裝置的瀏覽器。</p>
+        </aside>
+      </section>
+
+      <section id="quiz" class="quiz-card" aria-labelledby="quizTitle" hidden>
+        <div class="quiz-topline"><span class="section-kicker"><span>02</span> 正在練習</span><button id="exitQuizButton" class="text-button" type="button">結束練習</button></div>
+        <div class="quiz-heading"><div><p id="quizModeLabel" class="eyebrow">練習模式</p><h2 id="quizTitle">來試試看</h2></div><span id="questionCounter" class="question-counter"></span></div>
+        <div class="progress-track" role="progressbar" aria-label="答題進度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="progressFill"></span></div>
+        <div id="questionArea"></div>
+        <div class="quiz-actions"><p id="quizHint" class="quiz-hint">選擇一個答案，看看自己記得多少。</p><button id="nextButton" class="button button-primary" type="button" disabled>提交答案 <span aria-hidden="true">→</span></button></div>
+      </section>
+
+      <section id="result" class="result-card" aria-labelledby="resultTitle" hidden>
+        <div class="result-emblem" aria-hidden="true">✦</div><p class="eyebrow">這次的學習成果</p><h2 id="resultTitle">做得好，完成練習！</h2>
+        <div id="resultArea"></div>
+        <div class="result-actions"><button id="againButton" class="button button-primary" type="button">再練一次 <span aria-hidden="true">↻</span></button><a class="button button-secondary" href="#learningPoints">回看學習重點 <span aria-hidden="true">↓</span></a></div>
+      </section>
+
+      <section id="learningPoints" class="learning-section" aria-labelledby="learningTitle">
+        <div class="learning-header"><div><div class="section-kicker"><span>03</span> 按自己的步伐複習</div><h2 id="learningTitle">本月學習重點<span class="heading-period">・</span></h2><p id="learningIntro" class="section-intro">每個重點都有例句和常見錯誤，讀完可以接著練習。</p></div><span id="learningCount" class="learning-count"></span></div>
+        <div id="learningPointsContent" class="learning-points-content"></div>
+        <p class="notice"><span class="notice-mark" aria-hidden="true">i</span><span>部分筆記字跡較模糊，系統會標出「AI 猜測，請對照原筆記」。這些題目只會出現在練習模式；測驗模式只使用高信心內容。</span></p>
+      </section>
+
+      <footer class="site-footer"><a class="brand brand-small" href="#top"><span class="brand-mark" aria-hidden="true">日</span><span><strong>日文自學室</strong><small>把每天一點點，累積成進步。</small></span></a><span>慢慢來，也是在前進。 <span aria-hidden="true">✳</span></span></footer>
+    </main>
+    <script src="app.js?v=2.0"></script><script src="unlock.js"></script>
+  </body>
+</html>

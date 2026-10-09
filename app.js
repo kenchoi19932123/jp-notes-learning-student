@@ -81,7 +81,7 @@ function renderQuestion() {
     return `<button class="choice" type="button" data-answer="${escapeHtml(choice)}">${escapeHtml(label)}<span class="choice-indicator" aria-hidden="true"></span></button>`;
   }).join("")}</div>` : `<label class="answer-label" for="answerInput">你的答案</label><input class="answer-input" id="answerInput" autocomplete="off" placeholder="在這裡輸入答案" />`;
   const handwritingNote = question.source_confidence === "MEDIUM" ? '<p class="question-warning"><span aria-hidden="true">✳</span> 這題來自較模糊的手寫筆記，請對照原筆記。</p>' : "";
-  const example = question.example_ja ? `<p class="question-example"><span>例句</span><span class="japanese">${escapeHtml(question.example_ja)}</span></p>` : "";
+  const example = question.example_ja ? `<p id="questionExample" class="question-example" hidden><span>參考例句</span><span class="japanese">${escapeHtml(question.example_ja)}</span></p>` : "";
   byId("questionArea").innerHTML = `<p class="question-prompt">${escapeHtml(question.prompt)}</p>${example}${handwritingNote}${choices}<p id="feedback" class="feedback" aria-live="polite"></p>`;
   document.querySelectorAll(".choice").forEach((button) => button.addEventListener("click", () => selectChoice(button)));
   byId("nextButton").disabled = true;
@@ -109,6 +109,8 @@ function answer(value) {
   if (state.mode === "practice") {
     feedback.className = `feedback ${correct ? "feedback-correct" : "feedback-wrong"}`;
     feedback.innerHTML = `<strong>${correct ? "答對了！" : `正確答案：${escapeHtml(question.answer)}`}</strong>${question.explanation_zh_hant ? `<span>${escapeHtml(question.explanation_zh_hant)}</span>` : ""}`;
+    const example = byId("questionExample");
+    if (example) example.hidden = false;
   } else {
     feedback.className = "feedback feedback-recorded";
     feedback.textContent = "答案已記錄，完成測驗後一起查看結果。";
@@ -145,7 +147,7 @@ function finishQuiz() {
   byId("result").hidden = false;
   byId("resultTitle").textContent = state.score === state.questions.length ? "全對！太棒了！" : "做得好，完成練習！";
   const percentage = Math.round((state.score / state.questions.length) * 100);
-  const review = state.answers.map(({ question, value, correct }, index) => `<li class="review-item ${correct ? "review-correct" : "review-wrong"}"><span class="review-index">${String(index + 1).padStart(2, "0")}</span><div><strong>${escapeHtml(question.prompt)}</strong><p>你的答案：${escapeHtml(value || "（未作答）")} <span aria-hidden="true">·</span> ${correct ? "答對" : `正確答案：${escapeHtml(question.answer)}`}</p>${!correct && question.explanation_zh_hant ? `<small>${escapeHtml(question.explanation_zh_hant)}</small>` : ""}${question.source_confidence === "MEDIUM" ? `<small class="review-warning">這題含有未確認手寫內容，請對照原筆記。</small>` : ""}</div><span class="review-mark" aria-hidden="true">${correct ? "✓" : "↻"}</span></li>`).join("");
+  const review = state.answers.map(({ question, value, correct }, index) => `<li class="review-item ${correct ? "review-correct" : "review-wrong"}"><span class="review-index">${String(index + 1).padStart(2, "0")}</span><div><strong>${escapeHtml(question.prompt)}</strong><p>你的答案：${escapeHtml(value || "（未作答）")} <span aria-hidden="true">·</span> ${correct ? "答對" : `正確答案：${escapeHtml(question.answer)}`}</p>${!correct && question.explanation_zh_hant ? `<small>${escapeHtml(question.explanation_zh_hant)}</small>` : ""}${question.example_ja ? `<small>參考例句：${escapeHtml(question.example_ja)}</small>` : ""}${question.source_confidence === "MEDIUM" ? `<small class="review-warning">這題含有未確認手寫內容，請對照原筆記。</small>` : ""}</div><span class="review-mark" aria-hidden="true">${correct ? "✓" : "↻"}</span></li>`).join("");
   byId("resultArea").innerHTML = `<div class="score-summary"><strong>${state.score}<span>/${state.questions.length}</span></strong><div><b>答對 ${percentage}%</b><small>${percentage >= 80 ? "掌握得很好，繼續保持！" : "看過錯題解說後，再試一次會更熟悉。"}</small></div></div><h3 class="review-heading">逐題回顧 <span>${state.questions.length} 題</span></h3><ol class="review-list">${review}</ol>`;
   saveStats();
   byId("result").scrollIntoView({ behavior: "smooth", block: "start" });

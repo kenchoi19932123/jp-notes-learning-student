@@ -1,3 +1,24 @@
+(function (root) {
+  function shuffleQuestions(questions, random = Math.random) {
+    const shuffled = [...questions];
+    for (let index = shuffled.length - 1; index > 0; index -= 1) {
+      const swapIndex = Math.floor(random() * (index + 1));
+      [shuffled[index], shuffled[swapIndex]] = [shuffled[swapIndex], shuffled[index]];
+    }
+    return shuffled;
+  }
+
+  function selectQuestions(questions, requested, random = Math.random) {
+    const shuffled = shuffleQuestions(questions, random);
+    return requested === "Unlimited Practice"
+      ? shuffled
+      : shuffled.slice(0, Math.min(shuffled.length, Number(requested)));
+  }
+
+  root.JPNotesQuiz = { shuffleQuestions, selectQuestions };
+  if (typeof module !== "undefined" && module.exports) module.exports = root.JPNotesQuiz;
+})(typeof window === "undefined" ? globalThis : window);
+
 const STORAGE_KEY = "jpNotesLearningStatsV1";
 const state = { data: null, questions: [], answers: [], index: 0, score: 0, mode: "practice", answered: false, pendingValue: null };
 
@@ -24,7 +45,7 @@ function selectedQuestions() {
     pool = pool.filter((question) => question.source_confidence === "HIGH");
   }
   const requested = byId("countSelect").value;
-  return requested === "Unlimited Practice" ? pool : pool.slice(0, Number(requested));
+  return JPNotesQuiz.selectQuestions(pool, requested);
 }
 
 function displayMonth(month) {
